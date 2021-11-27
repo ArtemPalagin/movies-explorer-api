@@ -8,7 +8,8 @@
     "lint": "npx eslint .",
     "lint:fix": "eslint --fix --ext .js,.jsx .",
     "dev": "nodemon app.js",
-    "start": "node app.js"
+    "start": "node app.js",
+    "deploy": "\"C:\\PuTTY\\pscp.exe\" -i \"C:\\Users\\79030\\.ssh\\p.ppk\" -r ./* artem_plg@84.201.156.226:/home/artem_plg/express-mesto"
   },
   "keywords": [],
   "author": "Palagin Artem",
