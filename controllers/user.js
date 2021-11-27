@@ -41,7 +41,7 @@ module.exports.getUser = (req, res, next) => {
       if (!user) {
         throw new NotFoundError('Такого пользователя не существует');
       }
-      res.send({ data: user });
+      return res.send({ data: user });
     })
     .catch((err) => {
       if (err.name === 'CastError') {
