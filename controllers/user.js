@@ -20,11 +20,11 @@ module.exports.login = (req, res, next) => {
     }).catch(next);
 };
 module.exports.createUser = (req, res, next) => {
-  const { email, password } = req.body;
+  const { name, email, password } = req.body;
 
   bcrypt.hash(password, 10)
     .then((hash) => {
-      User.create({ email, password: hash })
+      User.create({ name, email, password: hash })
         .then((user) => {
           res.send({ data: user });
         })
