@@ -93,7 +93,7 @@ app.use((err, req, res, next) => {
         : message,
     });
 
-  // next();
+  next();
 });
 
 app.listen(PORT);
