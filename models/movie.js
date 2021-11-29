@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const { validator } = require('validator');
 
 const movieSchema = new mongoose.Schema({
   country: {
@@ -26,7 +27,7 @@ const movieSchema = new mongoose.Schema({
     required: true,
     validate: {
       validator(v) {
-        return /^https?:\/\/(www\.)?([\w\-.~:?#[\]@!$&'()*+,;=]){1,}#?/i.test(v);
+        return validator.isURL(v);
       },
       message: 'Такой ссылки не может быть',
     },
@@ -36,7 +37,7 @@ const movieSchema = new mongoose.Schema({
     required: true,
     validate: {
       validator(v) {
-        return /^https?:\/\/(www\.)?([\w\-.~:?#[\]@!$&'()*+,;=]){1,}#?/i.test(v);
+        return validator.isURL(v);
       },
       message: 'Такой ссылки не может быть',
     },
@@ -46,7 +47,7 @@ const movieSchema = new mongoose.Schema({
     required: true,
     validate: {
       validator(v) {
-        return /^https?:\/\/(www\.)?([\w\-.~:?#[\]@!$&'()*+,;=]){1,}#?/i.test(v);
+        return validator.isURL(v);
       },
       message: 'Такой ссылки не может быть',
     },
