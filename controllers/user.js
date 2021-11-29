@@ -32,6 +32,7 @@ module.exports.createUser = (req, res, next) => {
           if (err.name === 'MongoError' && err.code === 11000) {
             throw new ConflictError('Пользователь с таким email уже существует');
           }
+          throw err;
         }).catch(next);
     });
 };
@@ -47,6 +48,7 @@ module.exports.getUser = (req, res, next) => {
       if (err.name === 'CastError') {
         throw new RequestError('Невалидный id');
       }
+      throw err;
     }).catch(next);
 };
 module.exports.patchProfile = (req, res, next) => {
@@ -68,5 +70,6 @@ module.exports.patchProfile = (req, res, next) => {
       if (err.name === 'CastError') {
         throw new RequestError('Невалидный id');
       }
+      throw err;
     }).catch(next);
 };

@@ -41,6 +41,7 @@ module.exports.postMovie = (req, res, next) => {
       if (err.name === 'ValidationError') {
         throw new RequestError('Некорректные данные');
       }
+      throw err;
     }).catch(next);
 };
 module.exports.deleteMovie = (req, res, next) => {
