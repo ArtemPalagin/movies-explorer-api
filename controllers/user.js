@@ -26,6 +26,7 @@ module.exports.createUser = (req, res, next) => {
     .then((hash) => {
       User.create({ name, email, password: hash })
         .then((user) => {
+          // select: false работает только для get запросов, я не наешл как еще можно не отсылкать пароль при регистрации
           const userData = {
             _id: user._id, name: user.name, email: user.email, __v: user.__v,
           };
