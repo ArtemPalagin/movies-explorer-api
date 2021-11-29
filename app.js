@@ -72,8 +72,8 @@ app.post('/signup', celebrate({
 
 app.use(auth);
 
-app.use('/', require('./routes/user'));
-app.use('/', require('./routes/movie'));
+app.use(require('./routes/user'));
+app.use(require('./routes/movie'));
 
 app.use(errorLogger);
 
