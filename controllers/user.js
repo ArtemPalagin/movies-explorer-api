@@ -26,7 +26,7 @@ module.exports.createUser = (req, res, next) => {
     .then((hash) => {
       User.create({ name, email, password: hash })
         .then((user) => {
-          res.send(user);
+          res.send({ data: {user._ip, user.name, user.email, user.__v } });
         })
         .catch((err) => {
           if (err.name === 'MongoError' && err.code === 11000) {
