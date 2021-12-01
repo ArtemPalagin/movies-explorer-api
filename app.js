@@ -32,13 +32,17 @@ app.get('/crash-test', () => {
 const allowedCors = [
   'https://praktikum.tk',
   'http://praktikum.tk',
-  'http://plg.movies.students.nomoredomains.rocks',
+  'https://plg.movies.students.nomoredomains.rocks',
 ];
+
+const allowAll = true;
 
 app.use((req, res, next) => {
   const { origin } = req.headers;
   if (allowedCors.includes(origin)) {
     res.header('Access-Control-Allow-Origin', origin);
+  } else if (allowAll) {
+    res.header('Access-Control-Allow-Origin', '*');
   }
   const { method } = req;
 
