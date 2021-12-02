@@ -39,7 +39,7 @@ module.exports.postMovie = (req, res, next) => {
     .then((movie) => res.send({ data: movie }))
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        throw new RequestError('Некорректные данные');
+        throw err.errors;
       }
       throw err;
     }).catch(next);
