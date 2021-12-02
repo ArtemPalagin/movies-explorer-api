@@ -39,7 +39,11 @@ module.exports.postMovie = (req, res, next) => {
     .then((movie) => res.send({ data: movie }))
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        throw err.errors;
+        // eslint-disable-next-line no-throw-literal
+        throw {
+          statusCode: 400,
+          message: err.errors,
+        };
       }
       throw err;
     }).catch(next);
