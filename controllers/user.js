@@ -1,0 +1,78 @@
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
+require('dotenv').config();
+
+const { NODE_ENV, JWT_SECRET } = process.env;
+const User = require('../models/user');
+const {
+  AuthenticationError, ConflictError, NotFoundError, RequestError,
+} = require('../errors/export-errors');
+
+module.exports.login = (req, res, next) => {
+  const { email, password } = req.body;
+  return User.findUserByCredentials(email, password)
+    .then((user) => {
+      const token = jwt.sign({ _id: user._id }, NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret', { expiresIn: '7d' });
+      res.send({ token });
+    })
+    .catch((err) => {
+      throw new AuthenticationError(err.message);
+    }).catch(next);
+};
+module.exports.createUser = (req, res, next) => {
+  const { name, email, password } = req.body;
+
+  bcrypt.hash(password, 10)
+    .then((hash) => {
+      User.create({ name, email, password: hash })
+        .then((user) => {
+          const userData = {
+            _id: user._id, name: user.name, email: user.email, __v: user.__v,
+          };
+          res.send({ data: userData });
+        })
+        .catch((err) => {
+          if (err.name === 'MongoError' && err.code === 11000) {
+            throw new ConflictError('Пользователь с таким email уже существует');
+          }
+          throw err;
+        }).catch(next);
+    });
+};
+module.exports.getUser = (req, res, next) => {
+  User.findById(req.user._id)
+    .then((user) => {
+      if (!user) {
+        throw new NotFoundError('Такого пользователя не существует');
+      }
+      return res.send({ data: user });
+    })
+    .catch((err) => {
+      if (err.name === 'CastError') {
+        throw new RequestError('Невалидный id');
+      }
+      throw err;
+    }).catch(next);
+};
+module.exports.patchProfile = (req, res, next) => {
+  const { name, email } = req.body;
+  User.findByIdAndUpdate(req.user._id, { name, email }, { new: true, runValidators: true })
+    .then((user) => {
+      if (!user) {
+        throw new NotFoundError('Такого пользователя не существует');
+      }
+      if (!name || !email) {
+        throw new RequestError('Есть незаполненное поле');
+      }
+      return res.send({ data: user });
+    })
+    .catch((err) => {
+      if (err.name === 'ValidationError') {
+        throw new RequestError('Некорректные данные');
+      }
+      if (err.name === 'CastError') {
+        throw new RequestError('Невалидный id');
+      }
+      throw err;
+    }).catch(next);
+};

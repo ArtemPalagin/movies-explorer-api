@@ -1,0 +1,72 @@
+const mongoose = require('mongoose');
+const validator = require('validator');
+
+const movieSchema = new mongoose.Schema({
+  country: {
+    type: String,
+    required: true,
+  },
+  director: {
+    type: String,
+    required: true,
+  },
+  duration: {
+    type: Number,
+    required: true,
+  },
+  year: {
+    type: String,
+    required: true,
+  },
+  description: {
+    type: String,
+    required: true,
+  },
+  image: {
+    type: String,
+    required: true,
+    validate: {
+      validator(v) {
+        return validator.isURL(v);
+      },
+      message: 'Такой ссылки не может быть',
+    },
+  },
+  trailer: {
+    type: String,
+    required: true,
+    validate: {
+      validator(v) {
+        return validator.isURL(v);
+      },
+      message: 'Такой ссылки не может быть',
+    },
+  },
+  thumbnail: {
+    type: String,
+    required: true,
+    validate: {
+      validator(v) {
+        return validator.isURL(v);
+      },
+      message: 'Такой ссылки не может быть',
+    },
+  },
+  owner: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'user',
+    required: true,
+  },
+  movieId: {
+    type: Number,
+    required: true,
+  },
+  nameRU: {
+    type: String,
+  },
+  nameEN: {
+    type: String,
+  },
+});
+
+module.exports = mongoose.model('movie', movieSchema);
