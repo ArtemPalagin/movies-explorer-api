@@ -49,7 +49,7 @@ module.exports.postMovie = (req, res, next) => {
     }).catch(next);
 };
 module.exports.deleteMovie = (req, res, next) => {
-  Movie.findOne({ movieId: req.params.movieId })
+  Movie.findOne({ movieId: req.params.movieId, owner: req.user._id })
     .then((movie) => {
       if (!movie) {
         throw new NotFoundError('Такого фильма не существует');
